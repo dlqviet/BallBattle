@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class AttackSoldierBehavior : MonoBehaviour
@@ -10,9 +11,6 @@ public class AttackSoldierBehavior : MonoBehaviour
     private float reactivateTime;
     private float normalSpeed;
     private float carryingSpeed;
-
-    //variable for delaying update function
-    private float timer;
 
     private AttackerPool attackerPool;
     private FieldManager field;
@@ -33,8 +31,6 @@ public class AttackSoldierBehavior : MonoBehaviour
         normalSpeed = FindObjectOfType<GameManager>().atk_normalSpeed;
         carryingSpeed = FindObjectOfType<GameManager>().atk_carryingSpeed;
 
-        timer = spawnTime;
-
         StartCoroutine(Spawning());
     }
 
@@ -46,27 +42,43 @@ public class AttackSoldierBehavior : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //run straight
-        //this.transform.position += transform.forward * normalSpeed * Time.deltaTime;
-
-        //follow ball
         if (!this.transform.GetChild(2).gameObject.activeSelf)
-            this.transform.position = Vector3.MoveTowards(this.transform.position, ballToFollow.transform.position, normalSpeed * Time.deltaTime);
+        {
+            if (!ballToFollow.gameObject.activeInHierarchy && !this.transform.GetChild(3).gameObject.activeSelf)
+            {
+                //Debug.Log("no one: ");
+                //run straight
+                this.transform.position += transform.forward * normalSpeed * Time.deltaTime;
+            }
+
+            if (ballToFollow.gameObject.activeInHierarchy)
+            {
+                //Debug.Log("absolutely no one: ");
+                //follow ball
+                this.transform.position = Vector3.MoveTowards(this.transform.position, ballToFollow.transform.position, normalSpeed * Time.deltaTime);
+            }
+
+            if (this.transform.GetChild(3).gameObject.activeSelf)
+            {
+                //Debug.Log("this code: fuck this, i wont run");
+                //run with ball
+                this.transform.position += transform.forward * carryingSpeed * Time.deltaTime;
+            }
+        }
         else
             this.transform.position = this.transform.position;
-        //run with ball
-        //this.transform.position += transform.forward * carryingSpeed * Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Limit")
+        switch (other.gameObject.tag)
         {
-            this.gameObject.SetActive(false);
-        }
-        if (other.gameObject.tag == "Ball")
-        {
-            this.InactiveColorChange();
+            case "Limit":
+                this.gameObject.SetActive(false);
+                break;
+            case "Ball":
+                this.transform.GetChild(3).gameObject.SetActive(true);
+                break;
         }
     }
 

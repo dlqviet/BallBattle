@@ -90,7 +90,7 @@ public class FieldManager : MonoBehaviour
 
     private void SpawningBall()
     {
-        Vector3 ballPosition = new Vector3(Random.Range(-3f, 3f), 0.25f, Random.Range(0f, -5f));
+        Vector3 ballPosition = new Vector3(Random.Range(-3f, 3f), 0.2f, Random.Range(0f, -5f));
         ball.transform.position = ballPosition;
         ball.SetActive(true);
     }

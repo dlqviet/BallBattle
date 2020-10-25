@@ -8,6 +8,8 @@ TagManager:
   - P2Field
   - Ball
   - Limit
+  - Attacker
+  - Defender
   layers:
   - Default
   - TransparentFX

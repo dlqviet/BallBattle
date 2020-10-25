@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     public float atk_spawnTime = 0.5f;
     public float atk_reactivateTime = 2.5f;
     public float atk_normalSpeed = 1.5f;
-    public float atk_carryingSpeed = 1.5f;
+    public float atk_carryingSpeed = 0.75f;
 
 
     //defender:
