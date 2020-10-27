@@ -10,6 +10,8 @@ TagManager:
   - Limit
   - Attacker
   - Defender
+  - AttackerWithBall
+  - Detector
   layers:
   - Default
   - TransparentFX

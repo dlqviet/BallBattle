@@ -16,7 +16,7 @@ public class FieldManager : MonoBehaviour
     private int matchCounter = 0;
 
     private AttackerPool attackerPool;
-    private DeffenderPool deffenderPool;
+    private DefenderPool deffenderPool;
 
     private Ray ray;
     private RaycastHit rayHit;
@@ -24,7 +24,7 @@ public class FieldManager : MonoBehaviour
     private void Start()
     {
         attackerPool = FindObjectOfType<AttackerPool>();
-        deffenderPool = FindObjectOfType<DeffenderPool>();
+        deffenderPool = FindObjectOfType<DefenderPool>();
 
         matchCounter++;
         //random atk/def on the first match
@@ -42,6 +42,7 @@ public class FieldManager : MonoBehaviour
         SpawningBall();
     }
 
+    //control with touch
     private void FixedUpdate()
     {
         if (Input.GetMouseButtonDown(0))
@@ -86,13 +87,71 @@ public class FieldManager : MonoBehaviour
                 }
             }
         }
+
+        if (Input.touchCount == 1)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if (touch.phase == TouchPhase.Ended)
+            {
+                ray = Camera.main.ScreenPointToRay(touch.position);
+                if (Physics.Raycast(ray, out rayHit, 1000))
+                {
+                    //click on player1 field
+                    if (rayHit.collider.CompareTag("P1Field"))
+                    {
+                        p1Color = true;
+                        p2Color = false;
+                        if (p1Field.GetComponent<PlayerFieldManager>().atk == true)
+                        {
+                            GameObject newAttacker = attackerPool.GetAttacker();
+                            newAttacker.transform.position = rayHit.point;
+                            newAttacker.transform.Rotate(0, 180, 0);
+                        }
+                        else
+                        {
+                            GameObject newDefender = deffenderPool.GetDefender();
+                            newDefender.transform.position = rayHit.point;
+                            newDefender.transform.Rotate(0, 180, 0);
+                        }
+                    }
+
+                    //click on player2 field
+                    if (rayHit.collider.CompareTag("P2Field"))
+                    {
+                        p2Color = true;
+                        p1Color = false;
+                        if (p2Field.GetComponent<PlayerFieldManager>().atk == true)
+                        {
+                            GameObject newAttacker = attackerPool.GetAttacker();
+                            newAttacker.transform.position = rayHit.point;
+                        }
+                        else
+                        {
+                            GameObject newDefender = deffenderPool.GetDefender();
+                            newDefender.transform.position = rayHit.point;
+                        }
+                    }
+                }
+
+            }
+        }
     }
 
     private void SpawningBall()
     {
-        Vector3 ballPosition = new Vector3(Random.Range(-3f, 3f), 0.2f, Random.Range(0f, -5f));
-        ball.transform.position = ballPosition;
-        ball.SetActive(true);
+        if (p1Field.GetComponent<PlayerFieldManager>().atk == true)
+        {
+            Vector3 ballPosition = new Vector3(Random.Range(-3f, 3f), 0.5f, Random.Range(1f, 5.5f));
+            ball.transform.position = ballPosition;
+            ball.SetActive(true);
+        }
+        else
+        {
+            Vector3 ballPosition = new Vector3(Random.Range(-3f, 3f), 0.5f, Random.Range(-1f, -5f));
+            ball.transform.position = ballPosition;
+            ball.SetActive(true);
+        }
     }
 
     public void UpdateAfterMatchEnd()

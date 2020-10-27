@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviour
     public float atk_normalSpeed = 1.5f;
     public float atk_carryingSpeed = 0.75f;
 
-
     //defender:
     [Header("Defending Soldiers:")]
     public float def_energyCost = 3;
@@ -32,4 +31,14 @@ public class GameManager : MonoBehaviour
     //ball:
     [Header("Ball:")]
     public float ballSpeed = 1.5f;
+
+    public void Pause()
+    {
+        Time.timeScale = 0;
+    }
+
+    public void Resume()
+    {
+        Time.timeScale = 1;
+    }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeffenderPool : MonoBehaviour
+public class DefenderPool : MonoBehaviour
 {
     [SerializeField]
     private GameObject defenderPrefab;
