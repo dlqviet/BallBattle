@@ -7,26 +7,31 @@ public class FieldManager : MonoBehaviour
     public GameObject p1Field;
     public GameObject p2Field;
     public GameObject ball;
-
     [HideInInspector]
     public bool p1Color;
     [HideInInspector]
     public bool p2Color;
 
     private int matchCounter = 0;
+    private float atkEnergyCost;
+    private float defEnergyCost;
 
     private AttackerPool attackerPool;
     private DefenderPool deffenderPool;
+    private EnergyManager playerEnergy;
 
     private Ray ray;
     private RaycastHit rayHit;
 
     private void Start()
     {
+        atkEnergyCost = FindObjectOfType<GameManager>().atk_energyCost;
+        defEnergyCost = FindObjectOfType<GameManager>().def_energyCost;
+
         attackerPool = FindObjectOfType<AttackerPool>();
         deffenderPool = FindObjectOfType<DefenderPool>();
+        playerEnergy = FindObjectOfType<EnergyManager>();
 
-        matchCounter++;
         //random atk/def on the first match
         int randomNUmber = Random.Range(0, 2);
         if (randomNUmber == 0)
@@ -48,21 +53,30 @@ public class FieldManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out rayHit, 1000))
+            if (Physics.Raycast(ray, out rayHit))
             {
                 //click on player1 field
                 if (rayHit.collider.CompareTag("P1Field"))
                 {
                     p1Color = true;
                     p2Color = false;
-                    if (p1Field.GetComponent<PlayerFieldManager>().atk == true)
+                    //distinguish atk and def for player 1
+                    if (p1Field.GetComponent<PlayerFieldManager>().atk == true && 
+                        playerEnergy.p1Energy >= atkEnergyCost)
                     {
+                        playerEnergy.p1Energy -= atkEnergyCost;
+
+                        //spawn player 1 attacker
                         GameObject newAttacker = attackerPool.GetAttacker();
                         newAttacker.transform.position = rayHit.point;
                         newAttacker.transform.Rotate(0, 180, 0);
                     }
-                    else
+                    else if (p1Field.GetComponent<PlayerFieldManager>().atk == false && 
+                        playerEnergy.p1Energy >= defEnergyCost)
                     {
+                        playerEnergy.p1Energy -= defEnergyCost;
+
+                        //spawn player 1 defender
                         GameObject newDefender = deffenderPool.GetDefender();
                         newDefender.transform.position = rayHit.point;
                         newDefender.transform.Rotate(0, 180, 0);
@@ -74,13 +88,22 @@ public class FieldManager : MonoBehaviour
                 {
                     p2Color = true;
                     p1Color = false;
-                    if (p2Field.GetComponent<PlayerFieldManager>().atk == true)
+                    //distinguish atk and def for player 2
+                    if (p2Field.GetComponent<PlayerFieldManager>().atk == true &&
+                        playerEnergy.p2Energy >= atkEnergyCost)
                     {
+                        playerEnergy.p2Energy -= atkEnergyCost;
+
+                        //spawn player 2 attacker
                         GameObject newAttacker = attackerPool.GetAttacker();
                         newAttacker.transform.position = rayHit.point;
                     }
-                    else
+                    else if (p2Field.GetComponent<PlayerFieldManager>().atk == false &&
+                        playerEnergy.p2Energy >= defEnergyCost)
                     {
+                        playerEnergy.p2Energy -= defEnergyCost;
+
+                        //spawn player 2 defender
                         GameObject newDefender = deffenderPool.GetDefender();
                         newDefender.transform.position = rayHit.point;
                     }
@@ -142,13 +165,13 @@ public class FieldManager : MonoBehaviour
     {
         if (p1Field.GetComponent<PlayerFieldManager>().atk == true)
         {
-            Vector3 ballPosition = new Vector3(Random.Range(-3f, 3f), 0.5f, Random.Range(1f, 5.5f));
+            Vector3 ballPosition = new Vector3(Random.Range(-3f, 3f), 0.25f, Random.Range(1f, 5.5f));
             ball.transform.position = ballPosition;
             ball.SetActive(true);
         }
         else
         {
-            Vector3 ballPosition = new Vector3(Random.Range(-3f, 3f), 0.5f, Random.Range(-1f, -5f));
+            Vector3 ballPosition = new Vector3(Random.Range(-3f, 3f), 0.25f, Random.Range(-1f, -5f));
             ball.transform.position = ballPosition;
             ball.SetActive(true);
         }

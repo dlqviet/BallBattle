@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     [Header("Game Settings")]
     public float matchPerGame = 5;
     public float timePerMatch = 140;
-    public float energyBar = 6;
+    public int energyBar = 6;
     public float energyRegen = 0.5f;
 
     //attacker:

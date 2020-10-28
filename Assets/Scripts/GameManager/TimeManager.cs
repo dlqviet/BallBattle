@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class TimeManager : MonoBehaviour
 {
-    public float countdownTime = 3;
+    //public float countdownTime = 3;
     public Text matchTimer;
     //public Text countdownText;
 

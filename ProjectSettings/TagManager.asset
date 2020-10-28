@@ -12,6 +12,7 @@ TagManager:
   - Defender
   - AttackerWithBall
   - Detector
+  - Goal
   layers:
   - Default
   - TransparentFX

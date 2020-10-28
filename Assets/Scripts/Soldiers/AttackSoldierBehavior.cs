@@ -66,6 +66,12 @@ public class AttackSoldierBehavior : MonoBehaviour
     {
         switch (other.gameObject.tag)
         {
+            case "Goal":
+                if (this.gameObject.tag == "AttackerWithBall")
+                {
+
+                }
+                break;
             case "Limit":
                 if (this.gameObject.tag == "AttackerWithBall")
                 {
