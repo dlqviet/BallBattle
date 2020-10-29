@@ -5,7 +5,9 @@ using UnityEngine.PlayerLoop;
 
 public class DefendSoldierBehavior : MonoBehaviour
 {
-    private float energyCost;
+    [HideInInspector]
+    public bool defenderScored;
+
     private float spawnTime;
     private float reactivateTime;
     private float normalSpeed;
@@ -25,7 +27,6 @@ public class DefendSoldierBehavior : MonoBehaviour
         rangeFinder = FindObjectOfType<DefRangeFinder>();
 
         //get parameters
-        energyCost = FindObjectOfType<GameManager>().def_energyCost;
         spawnTime = FindObjectOfType<GameManager>().def_spawnTime;
         reactivateTime = FindObjectOfType<GameManager>().def_reactivateTime;
         normalSpeed = FindObjectOfType<GameManager>().def_normalSpeed;
@@ -51,6 +52,22 @@ public class DefendSoldierBehavior : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (defenderScored == true)
+        {
+            if (p1Field && !p2Field)
+            {
+                FindObjectOfType<ScoreManager>().player1Scored = true;
+                defenderScored = false;
+                this.gameObject.SetActive(false);
+            }
+            if (!p1Field && p2Field)
+            {
+                FindObjectOfType<ScoreManager>().player2Scored = true;
+                defenderScored = false;
+                this.gameObject.SetActive(false);
+            }
+        }
+
         //return to 1st position if inactive or hit limit
         if (this.transform.GetChild(2).gameObject.activeSelf || returnNow)
         {

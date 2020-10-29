@@ -8,17 +8,17 @@ public class BarSlotObjectPool : MonoBehaviour
     private GameObject barSlotPrefab;
     [SerializeField]
     private Queue<GameObject> barSlotPool = new Queue<GameObject>();
-    private int poolSize = 0;
+    private int poolSize;
 
     private void Start()
     {
-        poolSize = FindObjectOfType<GameManager>().energyBar;
+        poolSize = FindObjectOfType<GameManager>().energyBar ;
 
-        for (int i = 0; i < poolSize * 2; i++)
+        for (int i = 0; i < poolSize; i++)
         {
-            GameObject attacker = Instantiate(barSlotPrefab);
-            barSlotPool.Enqueue(attacker);
-            attacker.SetActive(false);
+            GameObject barSlot = Instantiate(barSlotPrefab);
+            barSlotPool.Enqueue(barSlot);
+            barSlot.SetActive(false);
         }
     }
 
@@ -39,7 +39,7 @@ public class BarSlotObjectPool : MonoBehaviour
     }
 
     //return object to pool
-    public void ReturnATKBar(GameObject thisBarSLot)
+    public void ReturnBarSlot(GameObject thisBarSLot)
     {
         barSlotPool.Enqueue(thisBarSLot);
         thisBarSLot.SetActive(false);

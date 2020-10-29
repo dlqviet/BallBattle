@@ -13,6 +13,7 @@ TagManager:
   - AttackerWithBall
   - Detector
   - Goal
+  - DefenderContainer
   layers:
   - Default
   - TransparentFX

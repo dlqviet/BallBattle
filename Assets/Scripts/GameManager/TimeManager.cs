@@ -9,21 +9,23 @@ public class TimeManager : MonoBehaviour
     public Text matchTimer;
     //public Text countdownText;
 
-    private float timePerMatch;
+    [HideInInspector]
+    public float timePerMatch;
 
     private void Start()
     {
         timePerMatch = FindObjectOfType<GameManager>().timePerMatch;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (timePerMatch < 10)
         {
             matchTimer.color = Color.yellow;
-            if (timePerMatch <= 0)
+            if (timePerMatch < 0)
             {
-                timePerMatch = 0;
+                FindObjectOfType<GameManager>().nextMatch = true;
+                timePerMatch = FindObjectOfType<GameManager>().timePerMatch;
             }
         }
 

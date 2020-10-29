@@ -14,7 +14,7 @@ public class DefRangeFinder : MonoBehaviour
     private void Start()
     {
         detectionRange = FindObjectOfType<GameManager>().def_detectionRange;
-        this.gameObject.GetComponent<SphereCollider>().radius = detectionRange / 30;
+        this.gameObject.transform.localScale = new Vector3(detectionRange / 10, detectionRange / 10, detectionRange/10);
     }
 
     private void OnTriggerStay(Collider other)

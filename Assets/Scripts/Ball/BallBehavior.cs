@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class BallBehavior : MonoBehaviour
 {
-    private float ballSpeed;
+    public GameObject attackerDetector;
 
     [HideInInspector]
     public bool passThisBall;
 
-    public GameObject attackerDetector;
+    private float ballSpeed;
 
     private void Start()
     {
@@ -34,7 +34,16 @@ public class BallBehavior : MonoBehaviour
         {
             //Debug.Log(GetClosestAttacker(attackerDetector.GetComponent<AttackerDetectorScript>().attackerDetection).position);
             Transform followAttacker = GetClosestAttacker(attackerDetector.GetComponent<AttackerDetectorScript>().attackerDetection);
-            this.transform.position = Vector3.MoveTowards(this.transform.position, followAttacker.position, ballSpeed * Time.deltaTime);
+            if (followAttacker)
+            {
+                this.transform.position = Vector3.MoveTowards(this.transform.position, followAttacker.position, ballSpeed * Time.deltaTime);
+            }
+            else
+            {
+                FindObjectOfType<DefendSoldierBehavior>().defenderScored = true;
+                passThisBall = false;
+                this.gameObject.SetActive(false);
+            }
         }
     }
 

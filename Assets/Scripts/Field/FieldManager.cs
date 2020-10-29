@@ -47,7 +47,6 @@ public class FieldManager : MonoBehaviour
         SpawningBall();
     }
 
-    //control with touch
     private void FixedUpdate()
     {
         if (Input.GetMouseButtonDown(0))
@@ -111,54 +110,54 @@ public class FieldManager : MonoBehaviour
             }
         }
 
-        if (Input.touchCount == 1)
-        {
-            Touch touch = Input.GetTouch(0);
+        //if (Input.touchCount == 1)
+        //{
+        //    Touch touch = Input.GetTouch(0);
 
-            if (touch.phase == TouchPhase.Ended)
-            {
-                ray = Camera.main.ScreenPointToRay(touch.position);
-                if (Physics.Raycast(ray, out rayHit, 1000))
-                {
-                    //click on player1 field
-                    if (rayHit.collider.CompareTag("P1Field"))
-                    {
-                        p1Color = true;
-                        p2Color = false;
-                        if (p1Field.GetComponent<PlayerFieldManager>().atk == true)
-                        {
-                            GameObject newAttacker = attackerPool.GetAttacker();
-                            newAttacker.transform.position = rayHit.point;
-                            newAttacker.transform.Rotate(0, 180, 0);
-                        }
-                        else
-                        {
-                            GameObject newDefender = deffenderPool.GetDefender();
-                            newDefender.transform.position = rayHit.point;
-                            newDefender.transform.Rotate(0, 180, 0);
-                        }
-                    }
+        //    if (touch.phase == TouchPhase.Ended)
+        //    {
+        //        ray = Camera.main.ScreenPointToRay(touch.position);
+        //        if (Physics.Raycast(ray, out rayHit, 1000))
+        //        {
+        //            //click on player1 field
+        //            if (rayHit.collider.CompareTag("P1Field"))
+        //            {
+        //                p1Color = true;
+        //                p2Color = false;
+        //                if (p1Field.GetComponent<PlayerFieldManager>().atk == true)
+        //                {
+        //                    GameObject newAttacker = attackerPool.GetAttacker();
+        //                    newAttacker.transform.position = rayHit.point;
+        //                    newAttacker.transform.Rotate(0, 180, 0);
+        //                }
+        //                else
+        //                {
+        //                    GameObject newDefender = deffenderPool.GetDefender();
+        //                    newDefender.transform.position = rayHit.point;
+        //                    newDefender.transform.Rotate(0, 180, 0);
+        //                }
+        //            }
 
-                    //click on player2 field
-                    if (rayHit.collider.CompareTag("P2Field"))
-                    {
-                        p2Color = true;
-                        p1Color = false;
-                        if (p2Field.GetComponent<PlayerFieldManager>().atk == true)
-                        {
-                            GameObject newAttacker = attackerPool.GetAttacker();
-                            newAttacker.transform.position = rayHit.point;
-                        }
-                        else
-                        {
-                            GameObject newDefender = deffenderPool.GetDefender();
-                            newDefender.transform.position = rayHit.point;
-                        }
-                    }
-                }
+        //            //click on player2 field
+        //            if (rayHit.collider.CompareTag("P2Field"))
+        //            {
+        //                p2Color = true;
+        //                p1Color = false;
+        //                if (p2Field.GetComponent<PlayerFieldManager>().atk == true)
+        //                {
+        //                    GameObject newAttacker = attackerPool.GetAttacker();
+        //                    newAttacker.transform.position = rayHit.point;
+        //                }
+        //                else
+        //                {
+        //                    GameObject newDefender = deffenderPool.GetDefender();
+        //                    newDefender.transform.position = rayHit.point;
+        //                }
+        //            }
+        //        }
 
-            }
-        }
+        //    }
+        //}
     }
 
     private void SpawningBall()
@@ -191,6 +190,7 @@ public class FieldManager : MonoBehaviour
             p1Field.GetComponent<PlayerFieldManager>().atk = true;
             p2Field.GetComponent<PlayerFieldManager>().atk = false;
         }
+        SpawningBall();
     }
 
 }

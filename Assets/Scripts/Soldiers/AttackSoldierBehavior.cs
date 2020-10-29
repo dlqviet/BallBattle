@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class AttackSoldierBehavior : MonoBehaviour
 {
-    private float energyCost;
     private float spawnTime;
     private float reactivateTime;
     private float normalSpeed;
@@ -25,7 +24,6 @@ public class AttackSoldierBehavior : MonoBehaviour
         attackerPool = FindObjectOfType<AttackerPool>();
 
         //get parameters
-        energyCost = FindObjectOfType<GameManager>().atk_energyCost;
         spawnTime = FindObjectOfType<GameManager>().atk_spawnTime;
         reactivateTime = FindObjectOfType<GameManager>().atk_reactivateTime;
         normalSpeed = FindObjectOfType<GameManager>().atk_normalSpeed;
@@ -38,6 +36,11 @@ public class AttackSoldierBehavior : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (FindObjectOfType<GameManager>().nextMatch)
+        {
+            this.gameObject.SetActive(false);
+        }
+
         ballToFollow = GameObject.FindGameObjectWithTag("Ball");
         //thereIsBall = GameObject.FindGameObjectWithTag("Ball");
         if (!this.transform.GetChild(2).gameObject.activeSelf)
@@ -66,10 +69,24 @@ public class AttackSoldierBehavior : MonoBehaviour
     {
         switch (other.gameObject.tag)
         {
+            //scoring
             case "Goal":
                 if (this.gameObject.tag == "AttackerWithBall")
                 {
+                    //bring the real ball out
+                    this.transform.GetChild(5).gameObject.SetActive(true);
+                    this.transform.GetChild(5).transform.parent = null;
 
+                    if (this.transform.GetChild(0).gameObject.activeSelf)
+                    {
+                        FindObjectOfType<ScoreManager>().player1Scored = true;
+                        this.gameObject.SetActive(false);
+                    }
+                    if (this.transform.GetChild(1).gameObject.activeSelf)
+                    {
+                        FindObjectOfType<ScoreManager>().player2Scored = true;
+                        this.gameObject.SetActive(false);
+                    }
                 }
                 break;
             case "Limit":
@@ -89,6 +106,7 @@ public class AttackSoldierBehavior : MonoBehaviour
             case "Defender":
                 if (this.transform.childCount > 5)
                 {
+                    //bring the real ball out
                     InactiveColorChange();
                     this.transform.GetChild(5).gameObject.SetActive(true);
                     this.transform.GetChild(5).transform.parent = null;
