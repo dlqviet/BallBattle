@@ -58,13 +58,11 @@ public class DefendSoldierBehavior : MonoBehaviour
             {
                 FindObjectOfType<ScoreManager>().player1Scored = true;
                 defenderScored = false;
-                this.gameObject.SetActive(false);
             }
             if (!p1Field && p2Field)
             {
                 FindObjectOfType<ScoreManager>().player2Scored = true;
                 defenderScored = false;
-                this.gameObject.SetActive(false);
             }
         }
 

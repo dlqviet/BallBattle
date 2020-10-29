@@ -32,7 +32,6 @@ public class BallBehavior : MonoBehaviour
     {
         if (passThisBall)
         {
-            //Debug.Log(GetClosestAttacker(attackerDetector.GetComponent<AttackerDetectorScript>().attackerDetection).position);
             Transform followAttacker = GetClosestAttacker(attackerDetector.GetComponent<AttackerDetectorScript>().attackerDetection);
             if (followAttacker)
             {

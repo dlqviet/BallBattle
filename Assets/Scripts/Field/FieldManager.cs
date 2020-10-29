@@ -12,12 +12,16 @@ public class FieldManager : MonoBehaviour
     [HideInInspector]
     public bool p2Color;
 
-    private int matchCounter = 0;
+    [HideInInspector]
+    public bool defenderScored;
+
     private float atkEnergyCost;
     private float defEnergyCost;
 
     private AttackerPool attackerPool;
     private DefenderPool deffenderPool;
+    private ATKSpawnFXPool atkSpawnFXPool;
+    private DEFSpawnFXPool defSpawnFXPool;
     private EnergyManager playerEnergy;
 
     private Ray ray;
@@ -30,6 +34,8 @@ public class FieldManager : MonoBehaviour
 
         attackerPool = FindObjectOfType<AttackerPool>();
         deffenderPool = FindObjectOfType<DefenderPool>();
+        atkSpawnFXPool = FindObjectOfType<ATKSpawnFXPool>();
+        defSpawnFXPool = FindObjectOfType<DEFSpawnFXPool>();
         playerEnergy = FindObjectOfType<EnergyManager>();
 
         //random atk/def on the first match
@@ -59,6 +65,7 @@ public class FieldManager : MonoBehaviour
                 {
                     p1Color = true;
                     p2Color = false;
+
                     //distinguish atk and def for player 1
                     if (p1Field.GetComponent<PlayerFieldManager>().atk == true && 
                         playerEnergy.p1Energy >= atkEnergyCost)
@@ -69,6 +76,9 @@ public class FieldManager : MonoBehaviour
                         GameObject newAttacker = attackerPool.GetAttacker();
                         newAttacker.transform.position = rayHit.point;
                         newAttacker.transform.Rotate(0, 180, 0);
+
+                        GameObject spawnFX = atkSpawnFXPool.GetFX();
+                        spawnFX.transform.position = newAttacker.transform.position;
                     }
                     else if (p1Field.GetComponent<PlayerFieldManager>().atk == false && 
                         playerEnergy.p1Energy >= defEnergyCost)
@@ -79,6 +89,9 @@ public class FieldManager : MonoBehaviour
                         GameObject newDefender = deffenderPool.GetDefender();
                         newDefender.transform.position = rayHit.point;
                         newDefender.transform.Rotate(0, 180, 0);
+
+                        GameObject spawnFX = defSpawnFXPool.GetFX();
+                        spawnFX.transform.position = newDefender.transform.position;
                     }
                 }
 
@@ -96,6 +109,9 @@ public class FieldManager : MonoBehaviour
                         //spawn player 2 attacker
                         GameObject newAttacker = attackerPool.GetAttacker();
                         newAttacker.transform.position = rayHit.point;
+
+                        GameObject spawnFX = atkSpawnFXPool.GetFX();
+                        spawnFX.transform.position = newAttacker.transform.position;
                     }
                     else if (p2Field.GetComponent<PlayerFieldManager>().atk == false &&
                         playerEnergy.p2Energy >= defEnergyCost)
@@ -105,6 +121,9 @@ public class FieldManager : MonoBehaviour
                         //spawn player 2 defender
                         GameObject newDefender = deffenderPool.GetDefender();
                         newDefender.transform.position = rayHit.point;
+
+                        GameObject spawnFX = defSpawnFXPool.GetFX();
+                        spawnFX.transform.position = newDefender.transform.position;
                     }
                 }
             }
@@ -164,13 +183,13 @@ public class FieldManager : MonoBehaviour
     {
         if (p1Field.GetComponent<PlayerFieldManager>().atk == true)
         {
-            Vector3 ballPosition = new Vector3(Random.Range(-3f, 3f), 0.25f, Random.Range(1f, 5.5f));
+            Vector3 ballPosition = new Vector3(Random.Range(-2f, 2f), 0.25f, Random.Range(1f, 5f));
             ball.transform.position = ballPosition;
             ball.SetActive(true);
         }
         else
         {
-            Vector3 ballPosition = new Vector3(Random.Range(-3f, 3f), 0.25f, Random.Range(-1f, -5f));
+            Vector3 ballPosition = new Vector3(Random.Range(-2f, 2f), 0.25f, Random.Range(-1f, -5f));
             ball.transform.position = ballPosition;
             ball.SetActive(true);
         }
@@ -178,7 +197,6 @@ public class FieldManager : MonoBehaviour
 
     public void UpdateAfterMatchEnd()
     {
-        matchCounter++;
         //swap atk/def between 2 teams after each match
         if (p1Field.GetComponent<PlayerFieldManager>().atk == true)
         {

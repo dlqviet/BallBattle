@@ -14,6 +14,7 @@ public class AttackSoldierBehavior : MonoBehaviour
     private bool p2Field;
 
     private AttackerPool attackerPool;
+    private DeathFXPool deathFXPool;
 
     private GameObject ballToFollow;
     //private bool thereIsBall;
@@ -22,6 +23,7 @@ public class AttackSoldierBehavior : MonoBehaviour
     {
         //get scripts
         attackerPool = FindObjectOfType<AttackerPool>();
+        deathFXPool = FindObjectOfType<DeathFXPool>();
 
         //get parameters
         spawnTime = FindObjectOfType<GameManager>().atk_spawnTime;
@@ -96,6 +98,8 @@ public class AttackSoldierBehavior : MonoBehaviour
                     this.transform.GetChild(5).transform.parent = null;
                     FindObjectOfType<BallBehavior>().passThisBall = true;
                 }
+                GameObject spawnFX = deathFXPool.GetDeathFX();
+                spawnFX.transform.position = this.transform.position;
                 this.gameObject.SetActive(false);
                 break;
             case "Ball":
