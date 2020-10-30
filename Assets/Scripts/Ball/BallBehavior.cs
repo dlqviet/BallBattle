@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
 
 public class BallBehavior : MonoBehaviour
@@ -39,6 +38,7 @@ public class BallBehavior : MonoBehaviour
             }
             else
             {
+                //lose if there is no one else to pass the ball
                 FindObjectOfType<DefendSoldierBehavior>().defenderScored = true;
                 passThisBall = false;
                 this.gameObject.SetActive(false);

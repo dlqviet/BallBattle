@@ -31,7 +31,7 @@ public class EnergyManager : MonoBehaviour
     private void Start()
     {
         //bugged when used in vertical
-        //playerBarSlotOP = FindObjectOfType<BarSlotObjectPool>();
+        playerBarSlotOP = FindObjectOfType<BarSlotObjectPool>();
 
         energyBar = FindObjectOfType<GameManager>().energyBar;
         energyRegen = FindObjectOfType<GameManager>().energyRegen;
@@ -42,13 +42,13 @@ public class EnergyManager : MonoBehaviour
         p2EnergyContainer.GetComponent<Slider>().maxValue = energyBar;
         p2EnergyHighlight.GetComponent<Slider>().maxValue = energyBar;
 
-        //for (int i = 0; i < energyBar; i++)
-        //{
-        //    GameObject aNewBar = playerBarSlotOP.GetBarSlot();
-        //    aNewBar.transform.parent = p1EnergySlots.transform;
-        //    GameObject anotherNewBar = playerBarSlotOP.GetBarSlot();
-        //    anotherNewBar.transform.parent = p2EnergySlots.transform;
-        //}
+        for (int i = 0; i < energyBar; i++)
+        {
+            GameObject aNewBar = playerBarSlotOP.GetBarSlot();
+            aNewBar.transform.parent = p1EnergySlots.transform;
+            GameObject anotherNewBar = playerBarSlotOP.GetBarSlot();
+            anotherNewBar.transform.parent = p2EnergySlots.transform;
+        }
     }
 
     private void FixedUpdate()

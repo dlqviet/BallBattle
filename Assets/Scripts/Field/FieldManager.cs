@@ -55,6 +55,7 @@ public class FieldManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //mouse control
         if (Input.GetMouseButtonDown(0))
         {
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -129,54 +130,86 @@ public class FieldManager : MonoBehaviour
             }
         }
 
-        //if (Input.touchCount == 1)
-        //{
-        //    Touch touch = Input.GetTouch(0);
+        //touch control
+        if (Input.touchCount == 1)
+        {
+            Touch touch = Input.GetTouch(0);
 
-        //    if (touch.phase == TouchPhase.Ended)
-        //    {
-        //        ray = Camera.main.ScreenPointToRay(touch.position);
-        //        if (Physics.Raycast(ray, out rayHit, 1000))
-        //        {
-        //            //click on player1 field
-        //            if (rayHit.collider.CompareTag("P1Field"))
-        //            {
-        //                p1Color = true;
-        //                p2Color = false;
-        //                if (p1Field.GetComponent<PlayerFieldManager>().atk == true)
-        //                {
-        //                    GameObject newAttacker = attackerPool.GetAttacker();
-        //                    newAttacker.transform.position = rayHit.point;
-        //                    newAttacker.transform.Rotate(0, 180, 0);
-        //                }
-        //                else
-        //                {
-        //                    GameObject newDefender = deffenderPool.GetDefender();
-        //                    newDefender.transform.position = rayHit.point;
-        //                    newDefender.transform.Rotate(0, 180, 0);
-        //                }
-        //            }
+            if (touch.phase == TouchPhase.Ended)
+            {
+                ray = Camera.main.ScreenPointToRay(touch.position);
+                if (Physics.Raycast(ray, out rayHit))
+                {
+                    //click on player1 field
+                    if (rayHit.collider.CompareTag("P1Field"))
+                    {
+                        p1Color = true;
+                        p2Color = false;
 
-        //            //click on player2 field
-        //            if (rayHit.collider.CompareTag("P2Field"))
-        //            {
-        //                p2Color = true;
-        //                p1Color = false;
-        //                if (p2Field.GetComponent<PlayerFieldManager>().atk == true)
-        //                {
-        //                    GameObject newAttacker = attackerPool.GetAttacker();
-        //                    newAttacker.transform.position = rayHit.point;
-        //                }
-        //                else
-        //                {
-        //                    GameObject newDefender = deffenderPool.GetDefender();
-        //                    newDefender.transform.position = rayHit.point;
-        //                }
-        //            }
-        //        }
+                        //distinguish atk and def for player 1
+                        if (p1Field.GetComponent<PlayerFieldManager>().atk == true &&
+                            playerEnergy.p1Energy >= atkEnergyCost)
+                        {
+                            playerEnergy.p1Energy -= atkEnergyCost;
 
-        //    }
-        //}
+                            //spawn player 1 attacker
+                            GameObject newAttacker = attackerPool.GetAttacker();
+                            newAttacker.transform.position = rayHit.point;
+                            newAttacker.transform.Rotate(0, 180, 0);
+
+                            GameObject spawnFX = atkSpawnFXPool.GetFX();
+                            spawnFX.transform.position = newAttacker.transform.position;
+                        }
+                        else if (p1Field.GetComponent<PlayerFieldManager>().atk == false &&
+                            playerEnergy.p1Energy >= defEnergyCost)
+                        {
+                            playerEnergy.p1Energy -= defEnergyCost;
+
+                            //spawn player 1 defender
+                            GameObject newDefender = deffenderPool.GetDefender();
+                            newDefender.transform.position = rayHit.point;
+                            newDefender.transform.Rotate(0, 180, 0);
+
+                            GameObject spawnFX = defSpawnFXPool.GetFX();
+                            spawnFX.transform.position = newDefender.transform.position;
+                        }
+                    }
+
+                    //click on player2 field
+                    if (rayHit.collider.CompareTag("P2Field"))
+                    {
+                        p2Color = true;
+                        p1Color = false;
+                        //distinguish atk and def for player 2
+                        if (p2Field.GetComponent<PlayerFieldManager>().atk == true &&
+                            playerEnergy.p2Energy >= atkEnergyCost)
+                        {
+                            playerEnergy.p2Energy -= atkEnergyCost;
+
+                            //spawn player 2 attacker
+                            GameObject newAttacker = attackerPool.GetAttacker();
+                            newAttacker.transform.position = rayHit.point;
+
+                            GameObject spawnFX = atkSpawnFXPool.GetFX();
+                            spawnFX.transform.position = newAttacker.transform.position;
+                        }
+                        else if (p2Field.GetComponent<PlayerFieldManager>().atk == false &&
+                            playerEnergy.p2Energy >= defEnergyCost)
+                        {
+                            playerEnergy.p2Energy -= defEnergyCost;
+
+                            //spawn player 2 defender
+                            GameObject newDefender = deffenderPool.GetDefender();
+                            newDefender.transform.position = rayHit.point;
+
+                            GameObject spawnFX = defSpawnFXPool.GetFX();
+                            spawnFX.transform.position = newDefender.transform.position;
+                        }
+                    }
+                }
+
+            }
+        }
     }
 
     private void SpawningBall()

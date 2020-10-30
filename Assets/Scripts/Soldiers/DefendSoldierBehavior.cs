@@ -52,6 +52,7 @@ public class DefendSoldierBehavior : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //check for scoring
         if (defenderScored == true)
         {
             if (p1Field && !p2Field)

@@ -44,16 +44,16 @@ public class GameManager : MonoBehaviour
     [Header("Ball:")]
     public float ballSpeed = 1.5f;
 
-    //[HideInInspector]
+    [HideInInspector]
     public bool nextMatch;
     [HideInInspector]
     public bool restartGame;
-    //[HideInInspector]
+    [HideInInspector]
     public int currentMatch = 1;
 
     private void Start()
     {
-        //turn on before match UI 
+        //turn on UI when launch game
         this.uiBeforeEachMatch.SetActive(true);
 
         StartCoroutine(PauseBeforeAMatch(2));
@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //check end game
         if (currentMatch > matchPerGame)
         {
             if (FindObjectOfType<ScoreManager>().p1Score > FindObjectOfType<ScoreManager>().p2Score)
@@ -111,7 +112,7 @@ public class GameManager : MonoBehaviour
 
             nextMatch = false;
 
-            //turn on some UIs
+            //turn UIs after a match
             if (currentMatch < matchPerGame + 1)
             {
                 if (FindObjectOfType<ScoreManager>().p1Score > FindObjectOfType<ScoreManager>().p2Score)
